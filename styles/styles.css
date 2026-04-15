@@ -4,3 +4,12 @@
     border-radius: 10px;
     margin: 0 0 10px 0;
 }
+
+.card {
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    transform: scale(1.05);
+    cursor: pointer;
+}

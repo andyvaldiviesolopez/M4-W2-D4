@@ -1,6 +1,6 @@
 const booksContainer = document.querySelector(".books")
 const booksCart = document.querySelector(".cart")
-
+const cartDelete = document.querySelector(".cartButton")
 const getBooks = async () => {
     try {
         const response = await fetch(`https://striveschool-api.herokuapp.com/books`)
@@ -16,6 +16,11 @@ const getBooks = async () => {
 }
 
 const generateCard = (books) => {
+    const deleteAllCart = document.createElement("button")
+    deleteAllCart.classList.add("btn", "btn-danger")
+    deleteAllCart.innerText = `Svuota il carrello`
+    cartDelete.appendChild(deleteAllCart)
+
     books.forEach(book => {
         const card = document.createElement("div")
         card.classList.add("card", "col-sm-6", "col-md-4", "col-lg-3", "bg-light")
@@ -36,11 +41,11 @@ const generateCard = (books) => {
         cardPrice.innerText = `Prezzo: ${book.price}€`
 
         const saveButton = document.createElement("button")
-        saveButton.classList.add("btn", "btn-primary", "btns")
+        saveButton.classList.add("btn", "btn-outline-primary", "btns")
         saveButton.innerText = `Aggiungi al carrello`
 
         const deleteButton = document.createElement("button")
-        deleteButton.classList.add("btn", "btn-danger", "btns")
+        deleteButton.classList.add("btn", "btn-outline-danger", "btns")
         deleteButton.innerText = `Nascondi`
 
 
@@ -67,16 +72,26 @@ const generateCard = (books) => {
             cardPrice.innerText = `Prezzo: ${book.price}€`
 
             const deleteOfCart = document.createElement("button")
-            deleteOfCart.classList.add("btn","btn-danger")
+            deleteOfCart.classList.add("btn", "btn-outline-danger")
             deleteOfCart.innerText = `Elimina dal carrello`
 
             cardCart.append(cardImg, cardTitle, cardCategory, cardPrice, deleteOfCart)
             booksCart.appendChild(cardCart)
-            card.classList.add("bg-success-subtle")
+
+            card.classList.add("bg-primary-subtle")
+
+            deleteButton.disabled = true
 
             deleteOfCart.addEventListener("click", () => {
                 cardCart.remove()
-                card.classList.remove("bg-success-subtle")
+                card.classList.remove("bg-primary-subtle")
+                deleteButton.disabled = false
+            })
+
+            deleteAllCart.addEventListener("click", () => {
+                booksCart.innerHTML = ""
+                card.classList.remove("bg-primary-subtle")
+                deleteButton.disabled = false
             })
         })
 
@@ -84,6 +99,11 @@ const generateCard = (books) => {
         deleteButton.addEventListener("click", () => {
             card.remove()
         })
+    })
+    deleteAllCart.addEventListener("click", () => {
+        cardCart.remove()
+        card.classList.remove("bg-success-subtle")
+        deleteButton.disabled = false
     })
 }
 
